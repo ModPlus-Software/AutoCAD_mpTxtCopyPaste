@@ -78,8 +78,9 @@
 
         private static PromptEntityOptions GetDestinationEntityOptions()
         {
-            var peo = new PromptEntityOptions("\n" + Language.GetItem(LangItem, "msg5"));
-            peo.SetRejectMessage("\n" + Language.GetItem(LangItem, "msg3"));
+            // Выберите объект (текст, выноска или таблица) для замены содержимого:
+            var peo = new PromptEntityOptions($"\n{Language.GetItem(LangItem, "msg5")}");
+            peo.SetRejectMessage($"\n{Language.GetItem(LangItem, "msg3")}");
             peo.AddAllowedClass(typeof(DBText), false);
             peo.AddAllowedClass(typeof(MText), false);
             peo.AddAllowedClass(typeof(MLeader), false);
@@ -90,10 +91,11 @@
 
         private static PromptEntityResult PromptSourceEntity(Document doc, ref bool deleteSource)
         {
-            var peo = new PromptEntityOptions("\n" + Language.GetItem(LangItem, "msg1"));
-            peo.SetMessageAndKeywords("\n" + Language.GetItem(LangItem, "msg2"), "Delete");
+            // Выберите объект-исходник (текст, выноска, таблица или размер):
+            var peo = new PromptEntityOptions($"\n{Language.GetItem(LangItem, "msg1")}");
+            peo.SetMessageAndKeywords($"\n{Language.GetItem(LangItem, "msg2")}", "Delete");
             peo.AppendKeywordsToMessage = true;
-            peo.SetRejectMessage("\n" + Language.GetItem(LangItem, "msg3"));
+            peo.SetRejectMessage($"\n{Language.GetItem(LangItem, "msg3")}");
             peo.AddAllowedClass(typeof(DBText), false);
             peo.AddAllowedClass(typeof(MText), false);
             peo.AddAllowedClass(typeof(MLeader), false);
@@ -104,6 +106,7 @@
 
             if (per.Status == PromptStatus.Keyword)
             {
+                // Удалять объект-исходник (для таблиц - содержимое ячейки)?
                 deleteSource = MessageBox.ShowYesNo(Language.GetItem(LangItem, "msg4"), MessageBoxIcon.Question);
 
                 // Сохраняем текущее значение как значение по умолчанию
@@ -188,7 +191,8 @@
 
         private static Cell GetCell(Table table, Editor ed)
         {
-            var r = ed.GetPoint($"\nPick cell");
+            // Укажите ячейку таблицы:
+            var r = ed.GetPoint($"\n{Language.GetItem(LangItem, "msg6")}");
             if (r.Status == PromptStatus.OK)
             {
                 var hit = table.HitTest(r.Value, Vector3d.ZAxis);
