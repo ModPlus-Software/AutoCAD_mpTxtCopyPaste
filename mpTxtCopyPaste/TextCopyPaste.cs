@@ -14,7 +14,7 @@
     /// <summary>
     /// Main class of plugin
     /// </summary>
-    public class MpTxtCopyPaste
+    public class TextCopyPaste
     {
         private const string LangItem = "mpTxtCopyPaste";
 
