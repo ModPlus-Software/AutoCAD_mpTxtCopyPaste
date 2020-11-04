@@ -16,15 +16,15 @@
     /// </summary>
     public class TextCopyPaste
     {
-        private const string LangItem = "mpTxtCopyPaste";
-
         /// <summary>
         /// Command start
         /// </summary>
         [CommandMethod("ModPlus", "mpTxtCopyPaste", CommandFlags.UsePickSet)]
         public static void MainFunction()
         {
+#if !DEBUG
             Statistic.SendCommandStarting(new ModPlusConnector());
+#endif
 
             try
             {
@@ -79,8 +79,8 @@
         private static PromptEntityOptions GetDestinationEntityOptions()
         {
             // Выберите объект (текст, выноска или таблица) для замены содержимого:
-            var peo = new PromptEntityOptions($"\n{Language.GetItem(LangItem, "msg5")}");
-            peo.SetRejectMessage($"\n{Language.GetItem(LangItem, "msg3")}");
+            var peo = new PromptEntityOptions($"\n{Language.GetItem("msg5")}");
+            peo.SetRejectMessage($"\n{Language.GetItem("msg3")}");
             peo.AddAllowedClass(typeof(DBText), false);
             peo.AddAllowedClass(typeof(MText), false);
             peo.AddAllowedClass(typeof(MLeader), false);
@@ -92,10 +92,10 @@
         private static PromptEntityResult PromptSourceEntity(Document doc, ref bool deleteSource)
         {
             // Выберите объект-исходник (текст, выноска, таблица или размер):
-            var peo = new PromptEntityOptions($"\n{Language.GetItem(LangItem, "msg1")}");
-            peo.SetMessageAndKeywords($"\n{Language.GetItem(LangItem, "msg2")}", "Delete");
+            var peo = new PromptEntityOptions($"\n{Language.GetItem("msg1")}");
+            peo.SetMessageAndKeywords($"\n{Language.GetItem("msg2")}", "Delete");
             peo.AppendKeywordsToMessage = true;
-            peo.SetRejectMessage($"\n{Language.GetItem(LangItem, "msg3")}");
+            peo.SetRejectMessage($"\n{Language.GetItem("msg3")}");
             peo.AddAllowedClass(typeof(DBText), false);
             peo.AddAllowedClass(typeof(MText), false);
             peo.AddAllowedClass(typeof(MLeader), false);
@@ -107,7 +107,7 @@
             if (per.Status == PromptStatus.Keyword)
             {
                 // Удалять объект-исходник (для таблиц - содержимое ячейки)?
-                deleteSource = MessageBox.ShowYesNo(Language.GetItem(LangItem, "msg4"), MessageBoxIcon.Question);
+                deleteSource = MessageBox.ShowYesNo(Language.GetItem("msg4"), MessageBoxIcon.Question);
 
                 // Сохраняем текущее значение как значение по умолчанию
                 ModPlus.Helpers.XDataHelpers.SetStringXData("mpTxtCopyPaste", deleteSource.ToString());
@@ -192,7 +192,7 @@
         private static Cell GetCell(Table table, Editor ed)
         {
             // Укажите ячейку таблицы:
-            var r = ed.GetPoint($"\n{Language.GetItem(LangItem, "msg6")}");
+            var r = ed.GetPoint($"\n{Language.GetItem("msg6")}");
             if (r.Status == PromptStatus.OK)
             {
                 var hit = table.HitTest(r.Value, Vector3d.ZAxis);
